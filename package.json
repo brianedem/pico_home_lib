@@ -1,0 +1,11 @@
+{
+    "urls": [
+        ["picow_home_lib/__init__.py", "src/picow_home_lib/__init__.py"],
+        ["picow_home_lib/led.py", "src/picow_home_lib/led.py"]
+    ],
+    "deps": [
+        ["aioble": "latest"]
+        ["logging": "latest"]
+    ],
+    "version": "0.1"
+}
