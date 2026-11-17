@@ -1,10 +1,13 @@
 {
     "urls": [
-        ["picow_home_lib/__init__.py", "src/picow_home_lib/__init__.py"],
-        ["picow_home_lib/led.py", "src/picow_home_lib/led.py"]
+        ["picow_home_lib/__init__.py", "picow_home_lib/__init__.py"],
+        ["picow_home_lib/base.py", "picow_home_lib/base.py"],
+        ["picow_home_lib/led.py", "picow_home_lib/led.py"],
+        ["picow_home_lib/configparser.py", "picow_home_lib/configparser.py"],
+        ["picow_home_lib/log_mem.py", "picow_home_lib/log_mem.py"]
     ],
     "deps": [
-        ["aioble": "latest"]
+        ["aioble": "latest"],
         ["logging": "latest"]
     ],
     "version": "0.1"
