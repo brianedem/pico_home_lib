@@ -190,7 +190,7 @@ class ConfigParser():
         self.write(buffer)
         output = buffer.getvalue()
         buffer.close()
-        return return output
+        return output
 
     def write(self, fd, space_around_delimiters=True, with_comments=False):
         if space_around_delimiters:
