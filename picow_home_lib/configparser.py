@@ -188,7 +188,9 @@ class ConfigParser():
     def dump(self):                 # TODO needs to move to parent file that augments this library
         buffer = io.StringIO('')
         self.write(buffer)
-        return buffer.getvalue()
+        output = buffer.getvalue()
+        buffer.close()
+        return return output
 
     def write(self, fd, space_around_delimiters=True, with_comments=False):
         if space_around_delimiters:
