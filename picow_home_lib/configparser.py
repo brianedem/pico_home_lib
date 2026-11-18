@@ -22,20 +22,19 @@
 # When a .ini file is displayed or written, the outline is used to generate the output.
 # New sections will be located after the last existing section
 # New options will be added to the end of the section
-# TODO:remove If duplicate sections were present in the original file, new options will be added at
-# TODO:remove the end of the last duplicate section
-# TODO:remove A shadow values object is used to identify new sections and objects. As objects are output,
-# TODO:remove they are removed from the shadow. At the end of last duplicate section any remaining objects
-# TODO:remove of the section in the shadow values are new. At the end of processing the outline,
-# TODO:remove any sections in the shadow values still containing object are new sections.
+# A shadow values object is used to identify new sections and objects. As objects are output,
+# they are removed from the shadow.
+# At the end of the section any remaining objects in the shadow section are new.
+# At the end of processing the outline, any remaining shadow sections are new and will be added
+# to the output.
 
+import io
 import platform
 import re
 
 _SECTION = 0
 _OPTION = 1
 _COMMENT = 2
-UNNAMED_SECTION = 'UNNAMED_SECTION' # TODO all sections need to be named
 
 if 'MicroPython' in platform.platform():
     import mlogging as logging
@@ -71,10 +70,9 @@ class ParsingError(Exception):
 class ConfigParser():
     def __init__ (self):
         self._sections = {}
-        self._proxies = {}
-        self.modified = False   # TODO indicate in console prompt when this is set
-#       self.validate = []
-        self.outline = []               # template used when updating configuration file
+        self._proxies = {}          # used to access section options using dunders
+        self.modified = False       # indicate in console prompt when this is set
+        self.outline = []           # template used when updating configuration file
 
     def sections(self):
         return list(self._sections.keys())
@@ -86,6 +84,7 @@ class ConfigParser():
             raise DuplicateSectionError(section)
         self._sections[section] = {}
         self._proxies[section] = SectionProxy(self, section)
+        self.modified = True
 
     def has_section(self, section):
         return section in self._sections
@@ -184,9 +183,12 @@ class ConfigParser():
         except KeyError:
             raise NoSectionError(section) from None
         sectdict[self.optionxform(option)] = value
+        self.modified = True
             
-    def dump(self):
-        return self.write(None)
+    def dump(self):                 # TODO needs to move to parent file that augments this library
+        buffer = io.StringIO('')
+        self.write(buffer)
+        return buffer.getvalue()
 
     def write(self, fd, space_around_delimiters=True, with_comments=False):
         if space_around_delimiters:
@@ -200,11 +202,12 @@ class ConfigParser():
         if not with_comments:
             for section in self._sections:
                 options = self._sections[section]
-                response += f'[{section}]\n'
+                fd.write(f'[{section}]\n')
                 for option,value in options.items():
-                    response += f'{option}{d}{value}\n'
+                    fd.write(f'{option}{d}{value}\n')
 
         # enhanced output using outline collected while reading source configuration file
+        # TODO this needs to be moved to a parent file that augments this library
         else:
             shadow_values = self._sections.copy()
             section = None
@@ -217,13 +220,13 @@ class ConfigParser():
                     # before starting the next section emit any remaining options
                     # from previous section
                     for option, value in options.items():
-                        response += f'{option}{d}{value}\n'
+                        fd.write(f'{option}{d}{value}\n')
                             
                     # set up for the next section
                     if line_value in self._sections:
                         section = line_value
                         options = shadow_values.pop(section, {})
-                        response += f'[{section}]\n'
+                        fd.write(f'[{section}]\n')
                     else:
                         section = None  # section was deleted
                         options = {}
@@ -233,25 +236,20 @@ class ConfigParser():
                     if value is None:
                         pass            # option was deleted
                     else:
-                        response += f'{option}{d}{value}\n'
+                        fd.write(f'{option}{d}{value}\n')
                 else:
                     comment = line_value
-                    response += f'{comment}\n'    # add the comment
+                    fd.write(f'{comment}\n')   # add the comment
 
             # end of the outline - see if the last section has any more options
             for option, value in options:
-                response += f'{option}{d}{value}\n'
+                fd.write(f'{option}{d}{value}\n')
 
             # any remaining non-empty sections in shadow values are new and need to be output
             for section,options in shadow_values.items():
-                response += f'[{section}]\n'
+                fd.write(f'[{section}]\n')
                 for option,value in options.items():
-                    response += f'{option}{d}{value}\n'
-
-        if fd:
-            fd.write(response)
-        else:
-            return response
+                    fd.write(f'{option}{d}{value}\n')
 
     def remove_option(self, section, option):
         try:
@@ -262,6 +260,7 @@ class ConfigParser():
         existed = option in sectdict
         if existed:
             del sectdict[option]
+            self.modified = True
         return existed
             
     def remove_section(self, section):
@@ -269,6 +268,7 @@ class ConfigParser():
         if existed:
             del self._sections[section]
             del self._proxies[section]
+            self.modified = True
         return existed
 
     def __getitem__(self, key):
