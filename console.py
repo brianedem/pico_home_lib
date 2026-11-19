@@ -27,7 +27,6 @@ async def console_task():
         le = line_edit.line_edit(reader, writer, eof_key='\x04')
         while True:
             command = await le.get_line()
-            print(f'command is .{command}.')
             if command == '':   # indication of EOF
                 break
             command = command.strip()

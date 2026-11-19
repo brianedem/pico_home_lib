@@ -22,13 +22,7 @@ class config_manager():
             cf.close()
 
     def _set(self, *args):
-        if len(args) == 2:      # section was not specified
-            section = configparser.UNNAMED_SECTION
-        elif len(args) == 3:    # section was specified
-            section = args[0]
-        else:
-            return "incorrect number of parameters"
-        option, value = args[-2:] # last two arguments
+        section, option, value = args
         if self.config.has_section(section):
             self.config.set(section, option, value)
         else:
@@ -52,13 +46,7 @@ class config_manager():
         return "OK"
 
     def _delete(self, *args):
-        if len(args) == 1:      # section not specified
-            section = 'UNNAMED_SECTION'
-        elif len(args) == 2:
-            section = args[0]
-        else:
-            return "incorrect number of parameters"
-        option = args[-1]
+        section, option = args
         if self.config.has_section(section):
             self.config.remove_option(section, option)
         else:
@@ -67,8 +55,7 @@ class config_manager():
     def _section(self, *args):
         if len(args) != 2:
             return 'incorrect number of parameters'
-        action = args[0]
-        section = args[1]
+        action, section = args
         if action=='add':
             if self.config.has_section(section):
                 return f'Section {section} already exists'
@@ -86,14 +73,10 @@ class config_manager():
         (r'config save', save,
             'config save                    save the current configuration to disk'),
         (r'config del (\w+) (\w+)',_delete,
-            'config del <section> <option>  delete the specified option from the configuration'),
-        (r'config del (\w+)',_delete,
-            'config del <option>            delete the specified option from the configuration'),
+            'config del <section> <option>  delete the option from the configuration'),
         (r'config set (\w+) (\w+) (\w+)',_set,
-            'config set <section> <element> <value>       set the option to the value'),
-        (r'config set (\w+) (\w+)',_set,
-            'config set <element> <value>   set the option to the value'),
+            'config set <section> <option> <value>       set the option to the value'),
         (r'config section (add|remove) (\w+)', _section,
-            'config section add|remove <section>       create named section'),
+            'config section add|remove <section>       add or remove a named section'),
         )
 

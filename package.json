@@ -2,9 +2,13 @@
     "urls": [
         ["picow_home_lib/__init__.py", "picow_home_lib/__init__.py"],
         ["picow_home_lib/base.py", "picow_home_lib/base.py"],
-        ["picow_home_lib/led.py", "picow_home_lib/led.py"],
+        ["picow_home_lib/cfg_manager.py", "picow_home_lib/cfg_manager.py"],
+        ["picow_home_lib/cmd_processor.py", "picow_home_lib/cmd_processor.py"],
         ["picow_home_lib/configparser.py", "picow_home_lib/configparser.py"],
-        ["picow_home_lib/log_mem.py", "picow_home_lib/log_mem.py"]
+        ["picow_home_lib/led.py", "picow_home_lib/led.py"],
+        ["picow_home_lib/line_edit.py", "picow_home_lib/line_edit.py"],
+        ["picow_home_lib/log_mem.py", "picow_home_lib/log_mem.py"],
+        ["picow_home_lib/usb_console.py", "picow_home_lib/usb_console.py"]
     ],
     "deps": [
         ["aioble": "latest"],

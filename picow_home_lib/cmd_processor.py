@@ -17,7 +17,7 @@ def reg_cmds(subsystem, commands):
 def process(command):
     if command.startswith('help'):
         response = []
-        response.append('help                       describe available commands')
+        response.append('help                           describe available commands')
         for c in cmd_list:
             if len(c) > 3:
                 response.append(c[3])
