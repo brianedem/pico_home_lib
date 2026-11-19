@@ -13,6 +13,7 @@ _led.on()
 _mode = Mode.ON
 _rate = None
 _blink_task = None
+_disabled = False
 
 async def led_blink(rate):
     while True:
@@ -20,6 +21,8 @@ async def led_blink(rate):
         _led.toggle()
 
 def set_mode(mode, rate=None):
+    if _disabled:
+        return
     global _mode, _rate, _blink_task
 #   print(f'setting led to {mode} at {rate}')
     assert not(mode is Mode.BLINK and rate is None)
@@ -37,3 +40,10 @@ def set_mode(mode, rate=None):
         _led.off()
     else:
         _blink_task = asyncio.create_task(led_blink(rate))
+
+def disable():
+    global _blink_task, _disabled
+    if _blink_task:
+        _blink_task.cancel()
+        _blink_task = None
+    _disabled = True

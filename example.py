@@ -5,31 +5,28 @@ import logging
 
 from picow_home_lib import base, led, log_mem
 
-# set up logging
-logging.basicConfig(level=logging.INFO)     # creates handler for console output
-log = logging.getLogger(__name__)           # add handler for memory log buffer
-log.setLevel(logging.DEBUG)
+sys.path.append('picow_home_lib')
+tests = ''
 
-# add a handler that will log to a memory buffer
-handler = log_mem.MemoryLogHandler() # can supply size argurment
+# set up a default logger to the USB console
+logging.basicConfig(level=logging.INFO)
+
+# set up a logger to a memory buffer
+handler = log_mem.MemoryLogHandler()
 formatter = logging.Formatter(fmt='%(asctime)s %(levelname)s:%(name)s:%(message)s')
 handler.setFormatter(formatter)
+log = logging.getLogger(__name__)
 log.addHandler(handler)
+log.setLevel(logging.DEBUG)
 
-log.debug('debug')
-log.info('logging setup complete')
-log.warning('warning')
-log.error('test error level')
-log.critical('critical')
+if 'LOGGING' in tests:
+    log.debug('debug')
+    log.info('logging setup complete')
+    log.warning('warning')
+    log.error('test error level')
+    log.critical('critical')
 
-async def main():
-    system = base.base()
+if 'LED' not in tests:
+    led.disable()
 
-    # we have to wait until async loop is running before starting these
-    led.set_mode(led.Mode.BLINK, 0.5)
-
-#   await asyncio.sleep(5)
-
-    print(log_mem.get_logs())
-
-asyncio.run(main())
+asyncio.run(base.base(), debug=True)
