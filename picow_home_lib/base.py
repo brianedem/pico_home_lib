@@ -45,6 +45,8 @@ async def base():
         # apply configuration options to logging
         # TODO - network logging
 
+        # set up WIFI
+
         # set timezone
 
         # set up bluetooth

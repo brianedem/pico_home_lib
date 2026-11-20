@@ -73,10 +73,10 @@ class config_manager():
         (r'config save', save,
             'config save                    save the current configuration to disk'),
         (r'config del (\w+) (\w+)',_delete,
-            'config del <section> <option>  delete the option from the configuration'),
+            'config del <section> <option>  remove option from the configuration'),
         (r'config set (\w+) (\w+) (\w+)',_set,
-            'config set <section> <option> <value>       set the option to the value'),
+            'config set <section> <option> <value>     set the option value'),
         (r'config section (add|remove) (\w+)', _section,
-            'config section add|remove <section>       add or remove a named section'),
+            'config section add|remove <section>       add or remove a section'),
         )
 
