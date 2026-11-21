@@ -15,39 +15,29 @@ def reg_cmds(subsystem, commands):
     for p,f,h in commands:
         cmd_list.append((subsystem, p, f, h))
 
-class processor():
-    def __init__(self):
-        self._history = []
-        self._h_start = 1
+def process(command, get_history):
+    response = ''
+    if command.startswith('hist'):
+        for n,h in get_history():
+            response += f'{n}  {h}\n'
 
-    def process(self, command):
-        response = ''
-        if command.startswith('hist'):
-            for n,h in enumerate(self._history, start=self._h_start):
-                response += f'{n}  {h}\n'
+        return response
 
-            return response
+    for s,p,f,_ in cmd_list:
+        m = re.match(p, command)
+        if m is None:
+            continue
+        if s is None:
+            return f(*m.groups())
+        else:
+            return f(s, *m.groups())
+    if command.startswith('help'):
+        response += 'help                           describe available commands\n'
+        response += 'history                        list of previous commands\n'
+        for _,_,_,h in cmd_list:
+            response += h + '\n'
 
-        self._history.append(command)
-        if len(self._history) > 50:
-            self._history.pop(0)
-            self._h_start += 1
+        return response
 
-        for s,p,f,_ in cmd_list:
-            m = re.match(p, command)
-            if m is None:
-                continue
-            if s is None:
-                return f(*m.groups())
-            else:
-                return f(s, *m.groups())
-        if command.startswith('help'):
-            response += 'help                           describe available commands\n'
-            response += 'history                        list of previous commands\n'
-            for _,_,_,h in cmd_list:
-                response += h + '\n'
-
-            return response
-
-        return 'unknown command'
+    return 'unknown command\n'
 

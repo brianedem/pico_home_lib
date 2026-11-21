@@ -10,7 +10,6 @@ from picow_home_lib import line_edit
 async def console_task():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
-    cp = cmd_processor.processor()
 
     try:
         tty.setcbreak(fd)
@@ -32,7 +31,7 @@ async def console_task():
                 break
             command = command.strip()
             if command:
-                response = cp.process(command)
+                response = cmd_processor.process(command, le.get_history)
                 if response:
                     writer.write(response.encode()+b'\n')
                     await writer.drain()

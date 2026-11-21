@@ -5,7 +5,8 @@ class line_edit():
         self.return_key = return_key
         self.eof_key = eof_key
 
-        self.cmd_history = ['',]
+        self.cmd_history = ['']
+        self.history_start = 1
         self.prompt = '> '          # TODO needs to include config.modified flag
 
     def set_prompt(self, prompt=''):
@@ -14,6 +15,12 @@ class line_edit():
         else:
             prompt = ''
         
+    def get_history(self):
+        if len(self.cmd_history) == 1:
+            return []
+        else:
+            return enumerate(reversed(self.cmd_history[1:]), self.history_start)
+
     async def get_line(self):
         command = str()
         command_index = 0
@@ -31,9 +38,14 @@ class line_edit():
             if key == self.return_key:              # line termination
                 self.writer.write(b'\r\n')
                 await self.writer.drain()
-                if len(command.strip()):
-                    self.cmd_history.insert(1, command)
-                return ''.join((command, '\n'))
+                command = command.strip()
+                if len(command):
+                    if len(self.cmd_history)==1 or command != self.cmd_history[1]:
+                        self.cmd_history.insert(1, command)
+                        if len(self.cmd_history) > 30:
+                            self.cmd_history.pop()
+                            self.history_start += 1
+                return command
 
             if key == '\033[A':                     # cursor up
                 if len(self.cmd_history) > history_index+1:
