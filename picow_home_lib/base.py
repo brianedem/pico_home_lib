@@ -7,7 +7,7 @@ import logging
 
 from picow_home_lib import cfg_manager
 from picow_home_lib import cmd_processor
-import console
+import usb_console
 from picow_home_lib import led
 #import time
 #import wlan
@@ -35,8 +35,8 @@ async def base():
         # start the LED blinking
         led.set_mode(led.Mode.BLINK, 0.5)
 
-        # set up console
-        tasks[asyncio.create_task(console.console_task())] = 'console_task'
+        # set up USB console
+        tasks[asyncio.create_task(usb_console.console_task())] = 'usb_console_task'
 
         # read configuration
         cfg_mgr = cfg_manager.config_manager(config_file)
