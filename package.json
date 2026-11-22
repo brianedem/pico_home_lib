@@ -1,6 +1,6 @@
 {
     "urls": [
-        ["picow_home_lib/__init__.py", "__init__.py"],
+        ["picow_home_lib/__init__.py", "picow_home_lib/__init__.py"],
         ["picow_home_lib/base.py", "picow_home_lib/base.py"],
         ["picow_home_lib/ble_console.py", "picow_home_lib/ble_console.py"],
         ["picow_home_lib/cfg_manager.py", "picow_home_lib/cfg_manager.py"],
