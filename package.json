@@ -12,8 +12,8 @@
         ["picow_home_lib/usb_console.py", "picow_home_lib/usb_console.py"]
     ],
     "deps": [
-        ["aioble": "latest"],
-        ["logging": "latest"]
+        ["aioble", "latest"],
+        ["logging", "latest"]
     ],
     "version": "0.1"
 }
