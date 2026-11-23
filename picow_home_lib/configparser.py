@@ -29,17 +29,13 @@
 # to the output.
 
 import io
-import platform
 import re
 
 _SECTION = 0
 _OPTION = 1
 _COMMENT = 2
 
-if 'MicroPython' in platform.platform():
-    import mlogging as logging
-else:
-    import logging
+import logging
 
 log = logging.getLogger(__name__)
 
