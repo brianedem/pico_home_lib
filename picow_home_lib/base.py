@@ -4,14 +4,22 @@
 #import aioble
 import asyncio
 import logging
+import platform
 
 from picow_home_lib import cfg_manager
 from picow_home_lib import cmd_processor
-import usb_console
+#import usb_console
 from picow_home_lib import led
 #import time
 #import wlan
 #import timekeeper as tk
+
+if 'MicroPython' in platform.platform():    # TODO move this into usb_console
+    from picow_home_lib import usb_console
+else:
+    import console as usb_console
+
+import sys
 
 log = logging.getLogger(__name__)
 
@@ -31,16 +39,16 @@ async def base():
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(except_handler)
 
+    # read configuration
+    cfg_mgr = cfg_manager.config_manager(config_file)
+    config = cfg_mgr.config
+
     try:
         # start the LED blinking
         led.set_mode(led.Mode.BLINK, 0.5)
 
         # set up USB console
         tasks[asyncio.create_task(usb_console.console_task())] = 'usb_console_task'
-
-        # read configuration
-        cfg_mgr = cfg_manager.config_manager(config_file)
-        config = cfg_mgr.config
 
         # apply configuration options to logging
         # TODO - network logging

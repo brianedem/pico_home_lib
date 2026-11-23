@@ -8,7 +8,6 @@ async def console_task():
     # create awaitable sockets - only in MicroPython
     reader = asyncio.StreamReader(sys.stdin)
     writer = asyncio.StreamWriter(sys.stdout)
-    cp = cmd_processor.processor()
 
     # mechanism to provide console echo and command line editing
     le = line_edit.line_edit(reader, writer)
@@ -16,7 +15,7 @@ async def console_task():
         command = await le.get_line()
         command = command.strip()
         if command :
-            response = cp.process(command)
+            response = cmd_processor.process(command)
             if response:
                 writer.write(response.encode()+b'\n')
                 await writer.drain()

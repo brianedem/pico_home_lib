@@ -1,12 +1,12 @@
-import sys
+#import sys
 
 import asyncio
 import logging
 
 from picow_home_lib import base, led, log_mem
 
-sys.path.append('picow_home_lib')
-tests = ''
+#sys.path.append('picow_home_lib')
+tests = 'LED'
 
 # set up a default logger to the USB console
 logging.basicConfig(level=logging.INFO)
@@ -29,4 +29,4 @@ if 'LOGGING' in tests:
 if 'LED' not in tests:
     led.disable()
 
-asyncio.run(base.base(), debug=True)
+asyncio.run(base.base())

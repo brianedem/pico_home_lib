@@ -1,12 +1,11 @@
 import asyncio
-from enum import Enum, auto
 
 import machine
 
-class Mode(Enum):
-    ON = auto()
-    OFF = auto()
-    BLINK = auto()
+class Mode():
+    ON = 1
+    OFF = 2
+    BLINK = 3
 
 _led = machine.Pin('LED', machine.Pin.OUT)
 _led.on()

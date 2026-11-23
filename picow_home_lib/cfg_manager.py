@@ -13,12 +13,13 @@ class config_manager():
         self.config = configparser.ConfigParser()
         try:
             cf = open(config_file, 'r')
-            self.config.read_file(cf)
         except OSError:
-            log.warning(f'Config file {config_file} could not be found')
-        except ValueError:
-            log.warning(f'Config file {config_file} format error')
-        finally:
+            log.error(f'Config file {config_file} could not be found')
+        else:
+            try:
+                self.config.read_file(cf)
+            except ValueError:
+                log.warning(f'Config file {config_file} format error')
             cf.close()
 
     def _set(self, *args):
@@ -79,4 +80,3 @@ class config_manager():
         (r'config section (add|remove) (\w+)', _section,
             'config section add|remove <section>       add or remove a section'),
         )
-
