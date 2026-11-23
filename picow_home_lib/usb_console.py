@@ -15,7 +15,7 @@ async def console_task():
         command = await le.get_line()
         command = command.strip()
         if command :
-            response = cmd_processor.process(command)
+            response = cmd_processor.process(command, le.get_history)
             if response:
                 writer.write(response.encode()+b'\n')
                 await writer.drain()

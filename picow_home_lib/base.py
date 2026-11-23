@@ -8,16 +8,12 @@ import platform
 
 from picow_home_lib import cfg_manager
 from picow_home_lib import cmd_processor
-#import usb_console
 from picow_home_lib import led
+from picow_home_lib import usb_console
 #import time
 #import wlan
 #import timekeeper as tk
 
-if 'MicroPython' in platform.platform():    # TODO move this into usb_console
-    from picow_home_lib import usb_console
-else:
-    import console as usb_console
 
 import sys
 

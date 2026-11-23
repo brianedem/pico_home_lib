@@ -26,7 +26,7 @@ class line_edit():
         command_index = 0
         history_index = 0
         if self.prompt:
-            self.writer.write(self.prompt.encode())
+            self.writer.write(self.prompt.encode()) # TODO verify that encode() is needed - decode not needed on read
             await self.writer.drain()
         while True:
             key = await self.process_key()
@@ -110,7 +110,6 @@ class line_edit():
         sequence = ''
         while True:
             key = await self.reader.read(1)
-            key = key.decode()
             if not key:
                 return ''
             sequence += key
