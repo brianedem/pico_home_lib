@@ -31,7 +31,7 @@ def except_handler(loop, context):
     else:
         log.error(f'task exception: "unknown task" threw: {ex}')
 
-async def base():
+async def system():
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(except_handler)
 
@@ -66,6 +66,6 @@ async def base():
         print('all tasks completed')
 
     except asyncio.CancelledError:
-        print('base() cancelled')
+        print('system() cancelled')
     except Exception as e:
-        print(f'base() got: {e}')
+        print(f'system() got: {e}')
