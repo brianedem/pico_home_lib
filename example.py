@@ -3,7 +3,7 @@
 import asyncio
 import logging
 
-from picow_home_lib import base, led, log_mem
+from picow_home_lib import system, led, log_mem
 
 #sys.path.append('picow_home_lib')
 tests = 'LED'
@@ -29,4 +29,4 @@ if 'LOGGING' in tests:
 if 'LED' not in tests:
     led.disable()
 
-asyncio.run(base.base())
+asyncio.run(system.system())
