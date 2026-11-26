@@ -9,7 +9,8 @@
         ["picow_home_lib/led.py", "picow_home_lib/led.py"],
         ["picow_home_lib/line_edit.py", "picow_home_lib/line_edit.py"],
         ["picow_home_lib/log_mem.py", "picow_home_lib/log_mem.py"],
-        ["picow_home_lib/usb_console.py", "picow_home_lib/usb_console.py"]
+        ["picow_home_lib/usb_console.py", "picow_home_lib/usb_console.py"],
+        ["picow_home_lib/wlan.py", "picow_home_lib/wlan.py"]
     ],
     "deps": [
         ["aioble", "latest"],

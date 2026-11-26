@@ -63,7 +63,7 @@ class ParsingError(Exception):
     def __init__(self, source, details=None):
         super().__init__(f"Source contains parsing errors: '{source}'")
 
-class ConfigParser():
+class ConfigParser:
     def __init__ (self):
         self._sections = {}
         self._proxies = {}          # used to access section options using dunders
@@ -107,7 +107,6 @@ class ConfigParser():
                 source = '<???>'
 
         section = None
-        missing_section_header_flagged = False
 
         for line_no, line in enumerate(f, start=1):
             line = line.strip()
@@ -194,8 +193,6 @@ class ConfigParser():
         else:
             d = '='
 
-        response = ""
-
         # original output, suitable for dumping to console
         if not with_comments:
             for section in self._sections:
@@ -274,12 +271,22 @@ class ConfigParser():
             raise KeyError(key)
         return(self._proxies[key])
 
-#   def __setitem__() would be used to circumvate the normal methods to create/overwrite a section
+    def __contains__(self, key):
+        return self.has_section(key)
 
-class SectionProxy():
+    def __len__(self):
+        return len(self._sections)
+
+    def __iter__(self):
+        return self._sections.keys().__iter__()
+
+class SectionProxy:
     def __init__(self, parser, name):
         self._parser = parser
         self._name = name
+
+    def __repr__(self):
+        return f'<Section: {self._name}>'
 
     def __getitem__(self, key):
         if not self._parser.has_option(self._name, key):
@@ -288,6 +295,20 @@ class SectionProxy():
 
     def __setitem__(self, key, value):
         return self._parser.set(self._name, key, value)
+
+    def __delitem__(self, key):
+        if not (self._parser.has_option(self._name, key) and
+                self._parser.remove_option(self._name, key)):
+            raise KeyError(key)
+
+    def __contains__(self, key):
+        return self._parser.has_option(self._name, key)
+
+    def __len__(self):
+        return len(self._parser.options(self._name))
+
+    def __iter__(self):
+        return self._parser.options(self._name).__iter__()
 
 if __name__ == '__main__':
     c = ConfigParser()

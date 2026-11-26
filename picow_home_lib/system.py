@@ -1,21 +1,13 @@
 #import re
 #import sys
 
-#import aioble
 import asyncio
 import logging
-import platform
+#import platform
 
-from picow_home_lib import cfg_manager
-from picow_home_lib import cmd_processor
-from picow_home_lib import led
-from picow_home_lib import usb_console
+from picow_home_lib import cfg_manager, cmd_processor, led, usb_console, wlan
 #import time
-#import wlan
 #import timekeeper as tk
-
-
-import sys
 
 log = logging.getLogger(__name__)
 
@@ -35,21 +27,21 @@ async def system():
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(except_handler)
 
-    # read configuration
-    cfg_mgr = cfg_manager.config_manager(config_file)
-    config = cfg_mgr.config
+    # read the configuration file
+    cfg_manager.config_manager(config_file)
 
     try:
         # start the LED blinking
-        led.set_mode(led.Mode.BLINK, 0.5)
+        led.set_mode(led.Mode.BLINK, 1.0)
 
         # set up USB console
-        tasks[asyncio.create_task(usb_console.console_task())] = 'usb_console_task'
+        tasks[asyncio.create_task(usb_console.console_task())] = 'usb_console'
 
         # apply configuration options to logging
         # TODO - network logging
 
-        # set up WIFI
+        # start up the WIFI management
+        tasks[asyncio.create_task(wlan.wifi_manager())] = 'wifi_manager'
 
         # set timezone
 

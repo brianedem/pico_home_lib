@@ -1,8 +1,8 @@
 import asyncio
 import sys
 
-from picow_home_lib import cmd_processor
-from picow_home_lib import line_edit
+from picow_home_lib import cmd_processor, line_edit
+
 
 async def console_task():
     # create awaitable sockets - only in MicroPython

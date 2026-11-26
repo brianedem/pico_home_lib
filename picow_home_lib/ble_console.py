@@ -1,4 +1,5 @@
 import asyncio
+
 import aioble
 import bluetooth
 
@@ -15,7 +16,7 @@ rx_char = aioble.Characteristic(uart_service, _UART_RX_CHAR_UUID, write=True, wr
 tx_char = aioble.Characteristic(uart_service, _UART_TX_CHAR_UUID, read=True, notify=True)
 aioble.register_services(uart_service)
 
-class _history():
+class _history:
     def __init__(self):
         self.history = []
         self.start = 1

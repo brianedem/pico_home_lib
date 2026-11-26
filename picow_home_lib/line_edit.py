@@ -1,4 +1,4 @@
-class line_edit():
+class line_edit:
     def __init__(self, reader, writer, return_key='\n', eof_key=''):
         self.reader = reader
         self.writer = writer
@@ -22,7 +22,7 @@ class line_edit():
             return enumerate(reversed(self.cmd_history[1:]), self.history_start)
 
     async def get_line(self):
-        command = str()
+        command = ''
         command_index = 0
         history_index = 0
         if self.prompt:
@@ -39,8 +39,7 @@ class line_edit():
                 self.writer.write(b'\r\n')
                 await self.writer.drain()
                 command = command.strip()
-                if len(command):
-                    if len(self.cmd_history)==1 or command != self.cmd_history[1]:
+                if len(command) and len(self.cmd_history)==1 or command != self.cmd_history[1]:
                         self.cmd_history.insert(1, command)
                         if len(self.cmd_history) > 30:
                             self.cmd_history.pop()
