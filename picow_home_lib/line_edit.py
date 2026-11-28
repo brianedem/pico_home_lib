@@ -39,7 +39,7 @@ class line_edit:
                 self.writer.write(b'\r\n')
                 await self.writer.drain()
                 command = command.strip()
-                if len(command) and len(self.cmd_history)==1 or command != self.cmd_history[1]:
+                if len(command) and (len(self.cmd_history)==1 or command != self.cmd_history[1]):
                         self.cmd_history.insert(1, command)
                         if len(self.cmd_history) > 30:
                             self.cmd_history.pop()
